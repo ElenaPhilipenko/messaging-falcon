@@ -12,3 +12,6 @@ libraryDependencies ++= Seq(
   cache,
   javaWs
 )
+
+libraryDependencies += "redis.clients" % "jedis" % "2.5.2"
+
