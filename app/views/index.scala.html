@@ -1,7 +1,40 @@
 @(message: String)
+    @main("Welcome to Play") {
+        <script src="./assets/javascripts/messaging.js"></script>
 
-@main("Welcome to Play") {
+        <div id="archive">
+        </div>
+        <div id="updates">
+        </div>
 
-    @play20.welcome(message, style = "Java")
+        <textarea class="form-control" rows="3" name='message-input' id="message-area" > </textarea>
+        <input type='button' id="publish-button" class="btn btn-primary" value='Publish'>
+        <input type='button' id="removeAll" class="btn btn-default" value='Remove All'>
 
-}
+        <script>
+
+
+        $ ( function ( ) {
+        $ ( '#publish-button' ).on ( 'click', function ( ) {
+        var msg = $ ( "textarea[name=message-input]" ).val ( ) ;
+        $ ( 'textarea[name=message-input]' ).val ( "" ) ;
+        publishMessage ( '   @routes.Application.postPublish() ', msg);
+        } ) ;
+         $('#removeAll' ).on('click', function(){
+         removeAllMessages ( '@routes.Application.cleanArchive()', function(){
+          $('#archive' ).html("");
+          $('#updates' ).html("");
+
+        } )
+         });
+
+        $.get ( '  @routes.Application.archive() ', function (data) {
+        $ ( "#archive" ).html ( data.messages.join ( '<br/> ' ) ) ;
+        } ) ;
+
+        subscribeForMessages ( '  @routes.Application.subscribe() ',function (message) {
+        $ ( "#updates" ).append ( message + '<br/> ' ) ;
+        } ) ;
+        } ) ;
+        </script>
+    }
